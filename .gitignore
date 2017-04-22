@@ -1,0 +1,10 @@
+*.swp
+.idea/
+
+venv/
+activate
+__pycache__/
+
+server.db.defrag*
+xcr.db*
+xcr.log
