@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, String, Integer, PrimaryKeyConstraint, desc
+from sqlalchemy import Table, Column, String, Integer, Float, PrimaryKeyConstraint, desc
 from sqlalchemy.sql import select
 
 from xcr.util import database
@@ -12,17 +12,38 @@ table_map_record_time = Table(
     PrimaryKeyConstraint('mapname', 'rank'),
 )
 
-table_players = Table(
-    "players",
+table_map_record_speed = Table(
+    "map_record_speed",
+    database.metadata,
+    Column("mapname", String(120)),
+    Column("speed", Float),
+)
+
+table_player = Table(
+    "player",
     database.metadata,
     Column("uid", String(60)),
     Column("player_name", String(120)),
 )
 
+table_player_to_record_time = Table(
+    "player_to_record_time",
+    database.metadata,
+    Column("uid", String(60)),
+    Column("mapname", String(120)),
+)
+
+table_player_to_record_speed = Table(
+    "player_to_record_speed",
+    database.metadata,
+    Column("uid", String(60)),
+    Column("mapname", String(120)),
+)
+
 database.metadata.create_all()
 
 
-class MapRecord:
+class MapRecordTime:
     @staticmethod
     def db_insert(mapname, rank, time):
         query = table_map_record_time.insert().values(
@@ -65,12 +86,45 @@ class MapRecord:
         return response
 
 
-class Players:
+class MapRecordSpeed:
+    @staticmethod
+    def db_insert(mapname, speed):
+        query = table_map_record_speed.insert().values(
+            mapname=mapname,
+            speed=speed,
+        )
+        database.db.execute(query)
+        database.db.commit()
+
+
+class Player:
     @staticmethod
     def db_insert(uid, player_name):
-        query = table_players.insert().values(
+        query = table_player.insert().values(
             uid=uid,
             player_name=player_name,
+        )
+        database.db.execute(query)
+        database.db.commit()
+
+
+class PlayerToMapRecordTime:
+    @staticmethod
+    def db_insert(uid, mapname):
+        query = table_player_to_record_time.insert().values(
+            uid=uid,
+            mapname=mapname,
+        )
+        database.db.execute(query)
+        database.db.commit()
+
+
+class PlayerToMapRecordSpeed:
+    @staticmethod
+    def db_insert(uid, mapname):
+        query = table_player_to_record_speed.insert().values(
+            uid=uid,
+            mapname=mapname,
         )
         database.db.execute(query)
         database.db.commit()
