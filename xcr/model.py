@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, String, Integer, Float, PrimaryKeyConstraint, desc
+from sqlalchemy import Table, Column, String, Integer, Float, PrimaryKeyConstraint, desc, asc
 from sqlalchemy.sql import select
 
 from xcr.util import database
@@ -66,16 +66,17 @@ class MapRecordTime:
     def db_top_scores():
         query = select([table_map_record_time.c.mapname, table_map_record_time.c.rank, table_map_record_time.c.time]) \
                        .order_by(desc(table_map_record_time.c.mapname)) \
-                       .order_by(desc(table_map_record_time.c.rank))
+                       .order_by(asc(table_map_record_time.c.rank))
         scores = database.db.execute(query)
 
         template = '_Top Scores_: '
         data = []
 
         for row in scores:
-            template += '*{}*: {}, '
-            data.append(row.name)
-            data.append(row.score)
+            template += '{} ({}): {:10.2f}\n'
+            data.append(row.mapname)
+            data.append(row.rank)
+            data.append(row.time/100)
 
         template = template.rstrip(', ')
         if data:

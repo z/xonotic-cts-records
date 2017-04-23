@@ -25,7 +25,13 @@ cp ~/.xonotic/data/server.db .
 Run the parser:
 
 ```
-python xrc.py
+python xrc.py parse
+```
+
+Display records:
+
+```
+python xrc.py records
 ```
 
 ## License
