@@ -1,3 +1,3 @@
 metadata = None
 base = None
-db = None
+session = None

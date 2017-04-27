@@ -19,9 +19,8 @@ class Session(Base):
         self.db_session = scoped_session(self.db_factory)
         self.db_metadata = MetaData()
         self.db_base = declarative_base(metadata=self.db_metadata, bind=self.db_engine)
-        self.db = self.db_session()
+        self.db_session = self.db_session()
 
-        # set botvars so plugins can access when loading
         database.metadata = self.db_metadata
         database.base = self.db_base
-        database.db = self.db
+        database.session = self.db_session
